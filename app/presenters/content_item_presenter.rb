@@ -3,6 +3,9 @@
 # Any linked content items that exist in the content store are expanded out to
 # include their title, base_path, api_url and web_url. See docs/output_examples
 # for an example of what this representation looks like.
+
+require "deepsort"
+
 class ContentItemPresenter
   RESOLVER = ContentTypeResolver.new("text/html")
 
@@ -45,8 +48,7 @@ class ContentItemPresenter
     ).tap { |i|
       i["redirects"] = item["redirects"] if i["schema_name"] == "redirect"
       render_timestamps_as_iso8601(item, i)
-    }.deep_stringify_keys
-    HashSorter.sort(hash)
+    }.deep_stringify_keys.deep_sort(array: false)
   end
 
 private
